@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kristen's Jellycats</title>
+  <meta name="theme-color" content="#33cee5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Jellycats">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1 id="app-title">Kristen's Jellycats</h1>
+  </header>
+
+  <div id="family-banner" class="family-banner" hidden>
+    <p>
+      <strong>Family view:</strong> claims are hidden from <span id="owner-name">her</span>.
+      <span id="claim-as" hidden>You're claiming as <span id="claim-as-name"></span>
+        (<button type="button" class="btn-link" id="change-name">change</button>).</span>
+    </p>
+    <button type="button" class="btn btn-outline btn-small" id="leave-family">Leave family view</button>
+  </div>
+
+  <main class="page">
+    <nav class="tabs" role="tablist">
+      <button class="tab is-active" role="tab" data-tab="owned" aria-selected="true">Collection</button>
+      <button class="tab" role="tab" data-tab="wishlist" aria-selected="false">Wishlist</button>
+    </nav>
+
+    <div class="filters">
+      <input id="search" type="search" placeholder="Search name, nickname, notes" aria-label="Search" autocomplete="off">
+      <select id="category" aria-label="Category">
+        <option value="">All categories</option>
+      </select>
+    </div>
+
+    <div class="section-head">
+      <h2 id="section-title">My Collection</h2>
+      <span id="count" class="count"></span>
+    </div>
+
+    <div id="status" class="status" hidden></div>
+    <ul id="grid" class="grid"></ul>
+  </main>
+
+  <button id="add-btn" class="fab" aria-label="Add a Jellycat">+</button>
+
+  <!-- Add / edit form -->
+  <dialog id="form-dialog" class="sheet">
+    <form id="item-form" novalidate>
+      <header class="sheet-head">
+        <h2 id="form-title">Add a Jellycat</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Close">&times;</button>
+      </header>
+
+      <div class="sheet-body">
+        <label class="field">
+          <span class="field-label">Name</span>
+          <input name="name" maxlength="120" autocomplete="off" enterkeyhint="done">
+          <small class="field-error" id="name-error" hidden>Every Jellycat needs a name.</small>
+        </label>
+
+        <div class="field">
+          <span class="field-label">Photo</span>
+          <div class="photo-picker">
+            <div class="photo-preview" id="photo-preview"></div>
+            <div class="photo-actions">
+              <label class="btn btn-outline btn-small">
+                <input type="file" id="photo-input" accept="image/*" hidden>
+                <span id="photo-label">Add photo</span>
+              </label>
+              <button type="button" class="btn-link" id="photo-remove" hidden>Remove photo</button>
+            </div>
+          </div>
+          <small class="field-error" id="photo-error" hidden></small>
+        </div>
+
+        <label class="field">
+          <span class="field-label">Nickname</span>
+          <input name="nickname" maxlength="120" autocomplete="off">
+        </label>
+
+        <div class="field-row">
+          <label class="field">
+            <span class="field-label">Size</span>
+            <select name="size">
+              <option value=""></option>
+              <option>Tiny</option>
+              <option>Small</option>
+              <option>Medium</option>
+              <option>Large</option>
+              <option>Huge</option>
+              <option>Really Big</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Category</span>
+            <input name="category" maxlength="60" list="category-list" autocomplete="off">
+            <datalist id="category-list"></datalist>
+          </label>
+        </div>
+
+        <fieldset class="field">
+          <legend class="field-label">Status</legend>
+          <div class="segmented">
+            <label><input type="radio" name="status" value="owned"><span>In my collection</span></label>
+            <label><input type="radio" name="status" value="wishlist"><span>On my wishlist</span></label>
+          </div>
+        </fieldset>
+
+        <div class="field-row" id="acquired-fields">
+          <label class="field">
+            <span class="field-label">Date acquired</span>
+            <input name="acquired_date" type="date">
+          </label>
+          <label class="field">
+            <span class="field-label">From</span>
+            <input name="acquired_from" maxlength="120" placeholder="Gift or store" autocomplete="off">
+          </label>
+        </div>
+
+        <label class="field">
+          <span class="field-label">Notes</span>
+          <textarea name="notes" maxlength="2000" rows="3"></textarea>
+        </label>
+      </div>
+
+      <footer class="sheet-foot">
+        <p class="form-error" id="form-error" hidden></p>
+        <button type="submit" class="btn btn-block" id="save-btn">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Detail view -->
+  <dialog id="detail-dialog" class="sheet">
+    <header class="sheet-head">
+      <h2 id="detail-name"></h2>
+      <button type="button" class="icon-btn" data-close aria-label="Close">&times;</button>
+    </header>
+    <div class="sheet-body">
+      <div class="detail-photo" id="detail-photo"></div>
+      <div class="detail-actions" id="detail-actions"></div>
+      <dl class="detail-fields" id="detail-fields"></dl>
+    </div>
+    <footer class="sheet-foot sheet-foot-split">
+      <button type="button" class="btn btn-outline" id="delete-btn">Delete</button>
+      <button type="button" class="btn" id="edit-btn">Edit</button>
+    </footer>
+  </dialog>
+
+  <!-- Asked once, the first time someone claims a gift -->
+  <dialog id="name-dialog" class="mini-dialog">
+    <form id="name-form" method="dialog">
+      <h2>Who's getting this?</h2>
+      <p>Your name is shown to other family members so nobody buys the same gift. It's never shown to <span class="owner-name">her</span>.</p>
+      <label class="field">
+        <span class="field-label">Your name</span>
+        <input name="claimer" maxlength="60" autocomplete="given-name" placeholder="e.g. Aunt Sue">
+      </label>
+      <div class="mini-actions">
+        <button type="button" class="btn btn-outline" id="name-cancel">Cancel</button>
+        <button type="submit" class="btn" id="name-ok">Claim it</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" hidden>
+    <span id="toast-text"></span>
+    <button type="button" id="toast-undo" class="toast-undo">Undo</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
