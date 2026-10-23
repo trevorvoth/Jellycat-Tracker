@@ -7,8 +7,8 @@ A phone-friendly website for logging Kristen's Jellycat collection with photos, 
 
 ## Links
 
-- **Kristen's link:** `https://trevorvoth.github.io/jellycat-tracker/`
-- **Family link:** `https://trevorvoth.github.io/jellycat-tracker/?f=<family token>`
+- **Kristen's link:** `https://trevorvoth.github.io/Jellycat-Tracker/`
+- **Family link:** `https://trevorvoth.github.io/Jellycat-Tracker/?f=<family token>`
 
 Anyone with either link can add and edit. Only the family link shows who has claimed which wishlist item; those claims are hidden from Kristen's link by the database itself, not just by the page. Keep the family link out of group chats she's in.
 
